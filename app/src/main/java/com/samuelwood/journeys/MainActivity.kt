@@ -1,11 +1,10 @@
 package com.samuelwood.journeys
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,11 +12,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,20 +23,30 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.unit.dp
-import com.samuelwood.journeys.models.Journey
+import com.google.firebase.firestore.FirebaseFirestore
 import com.samuelwood.journeys.ui.theme.JourneysTheme
-import com.samuelwood.journeys.viewModels.ViewModelJourney
-import com.samuelwood.journeys.viewModels.ViewModelMap
-import com.samuelwood.journeys.viewModels.ViewModelSettings
+
+import androidx.activity.viewModels
+import androidx.compose.foundation.border
+
+
+//import androidx.compose.material3.MaterialTheme
+//
+//
+//import androidx.compose.ui.graphics.Color.Companion.Gray
+//
+//import com.samuelwood.journeys.ui.theme.JourneysTheme
+//import com.samuelwood.journeys.viewModels.ViewModelJourney
+//import com.samuelwood.journeys.viewModels.ViewModelMap
+//import com.samuelwood.journeys.viewModels.ViewModelSettings
 
 class MainActivity : ComponentActivity() {
 
 //    private val viewModelUser: ViewModelUser by viewModels()
-    private val viewModelJourney: ViewModelJourney by viewModels()
-    private val viewModelMap: ViewModelMap by viewModels()
-    private val viewModelSettings: ViewModelSettings by viewModels()
+//    private val viewModelJourney: ViewModelJourney by viewModels()
+//    private val viewModelMap: ViewModelMap by viewModels()
+//    private val viewModelSettings: ViewModelSettings by viewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -104,8 +112,7 @@ fun journeysView(
 //        }
             Spacer(modifier = Modifier.padding(8.dp))
             Text(
-                "New Journey",
-                style = MaterialTheme.typography.headlineMedium
+                "New Journey"
             )
 
             Spacer(modifier = Modifier.padding(8.dp))
@@ -113,12 +120,12 @@ fun journeysView(
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                BasicTextField(
+                TextField(
                     value = newDeparture,
                     onValueChange = { newDeparture = it },
+                    label = { "New Departure" }, // This is not showing
                     modifier = Modifier
                         .weight(1f)
-                        .border(1.dp, Gray)
                         .padding(8.dp)
                 )
             }
@@ -129,12 +136,12 @@ fun journeysView(
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                BasicTextField(
+                TextField(
                     value = newDestination,
                     onValueChange = { newDestination = it },
+                    label = { "New Destination" }, // This is not showing
                     modifier = Modifier
                         .weight(1f)
-                        .border(1.dp, Gray)
                         .padding(8.dp)
                 )
             }
@@ -146,20 +153,16 @@ fun journeysView(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Button(
-                    onClick = {
-                        if (newDestination.isNotBlank()) {
-                            addJourney(newDeparture, newDestination)
-                            newDeparture = ""
-                            newDestination = ""
-                        }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 8.dp)
+                    onClick = { addJourney(newDeparture, newDestination) },
+                    enabled = newDeparture.isNotEmpty() && newDestination.isNotEmpty()
+//                        if (newDestination.isNotBlank()) { }
                 ) {
                     Text("Add Journey")
                 }
             }
+        }
+    }
+}
 //        LazyColumn(modifier = Modifier.padding(top = 16.dp)) {
 //            items(items = viewModelJourney.journeys) { journey ->
 //                Row(
@@ -177,21 +180,22 @@ fun journeysView(
 //                }
 //            }
 //        }
-        }
-    }
-}
+
 
 fun addJourney(departure: String, destination: String) {
-//        val newJourneyID = (journeys.maxOfOrNull { it.journeyID } ?: 0) + 1
-
-
-    val newJourney = Journey(
-//            journeyID = newJourneyID,
-        departure = departure,
-        destination = destination
+    val db = FirebaseFirestore.getInstance()
+    val journey = hashMapOf(
+        "newDeparture" to departure,
+        "newDestination" to destination
     )
-//        _journeys.add(newJourney)
-//        saveToPrefs()
+    db.collection("journeys")
+        .add(journey)
+        .addOnSuccessListener { docRef ->
+            Log.d("Firestore", "Ajout réussi avec ID : ${docRef.id}")
+        }
+        .addOnFailureListener { e ->
+            Log.w("Firestore", "Erreur lors de l'ajout", e)
+        }
 }
 
 
