@@ -5,19 +5,21 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.icons.Icons
-import androidx.compose.material3.Icon
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.glance.layout.padding
 import com.samuelwood.journeys.ui.theme.JourneysTheme
 import com.samuelwood.journeys.views.JourneysView
 import com.samuelwood.journeys.views.MapView
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Place
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.samuelwood.journeys.views.JourneysNavigationBar
+import com.samuelwood.journeys.views.SettingsView
 
 
 //import androidx.compose.material3.MaterialTheme
@@ -46,12 +48,44 @@ class MainActivity : ComponentActivity() {
         setContent {
             JourneysTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    JourneysNavigationBar()
+                    JourneysApp()
 //                      viewModelUser,
 //                        viewModelJourney,
 //                        viewModelMap,
 //                        viewModelSettings,
 //                        navController = rememberNavController()
+                }
+            }
+        }
+    }
+}
+
+
+
+@Composable
+fun JourneysApp() {
+
+    val navController = rememberNavController()
+
+    JourneysTheme {
+        Scaffold(
+            bottomBar = { JourneysNavigationBar(navController = NavController) }
+        ) { padding ->
+
+            NavHost(
+                navController = navController,
+                startDestination = "journeys",
+                modifier = Modifier.padding(16.dp)
+            ) {
+                composable("journeys_screen") {
+                    JourneysView(navController = navController) // Your JourneysView composable
+                }
+                composable("map_screen") {
+                    MapView(navController = navController) // Another composable destination
+                }
+                // Add more composable destinations here
+                composable("settings_screen") {
+                    SettingsView(navController = navController)
                 }
             }
         }
