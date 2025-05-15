@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "367663742237",
+    "project_id": "journeys-e4b8f",
+    "storage_bucket": "journeys-e4b8f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:367663742237:android:ac018d9155d3023a4775f4",
+        "android_client_info": {
+          "package_name": "com.samuelwood.journeys"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAty5a2AV7oLMJimtkU_F2h_rhJL1SZ92I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
