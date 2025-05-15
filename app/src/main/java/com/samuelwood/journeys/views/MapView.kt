@@ -23,7 +23,7 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 
 @Composable
-fun mapView() {
+fun MapView() {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 

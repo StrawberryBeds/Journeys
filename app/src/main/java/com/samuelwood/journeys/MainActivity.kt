@@ -5,12 +5,19 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.samuelwood.journeys.ui.theme.JourneysTheme
-//import com.samuelwood.journeys.views.journeysView
-import com.samuelwood.journeys.views.mapView
-
+import com.samuelwood.journeys.views.JourneysView
+import com.samuelwood.journeys.views.MapView
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Place
+import com.samuelwood.journeys.views.JourneysNavigationBar
 
 
 //import androidx.compose.material3.MaterialTheme
@@ -39,23 +46,17 @@ class MainActivity : ComponentActivity() {
         setContent {
             JourneysTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    mapView(
+                    JourneysNavigationBar()
 //                      viewModelUser,
 //                        viewModelJourney,
 //                        viewModelMap,
 //                        viewModelSettings,
 //                        navController = rememberNavController()
-                    )
                 }
             }
         }
     }
 }
-
-
-
-
-
 
 
 //@Composable

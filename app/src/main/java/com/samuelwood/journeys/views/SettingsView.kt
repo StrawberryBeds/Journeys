@@ -9,16 +9,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ComposableTarget
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.samuelwood.journeys.viewModels.ViewModelMap
 import com.samuelwood.journeys.viewModels.ViewModelSettings
 
 @Composable
-fun settingsView(viewModelSettings: ViewModelSettings, navController: NavHostController) {
+fun SettingsView(viewModelSettings: ViewModelSettings, navController: NavHostController) {
 
 
 //    var newDeparture by remember { mutableStateOf("") }

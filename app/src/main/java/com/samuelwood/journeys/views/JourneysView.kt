@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.google.firebase.firestore.FirebaseFirestore
 
 @Composable
-fun journeysView(
+fun JourneysView(
 ////    viewModelJourney: ViewModelJourney, navController: NavHostController
 ) {
 
