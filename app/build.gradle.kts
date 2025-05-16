@@ -43,7 +43,7 @@ android {
 
 dependencies {
 
-        var nav_version = "2.7.7" // Use the latest version
+        var nav_version = "2.9.0" // Use the latest version
         implementation ("androidx.navigation:navigation-compose:$nav_version")
 
 
@@ -55,7 +55,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.androidx.navigation.compose.jvmstubs)
+    implementation ("androidx.navigation:navigation-compose:2.7.7")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -64,7 +64,11 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-
+    implementation ("androidx.compose.ui:ui:1.6.0")
+    implementation ("androidx.compose.material:material:1.6.0")
+    implementation ("androidx.compose.ui:ui-tooling-preview:1.6.0")
+    implementation ("androidx.activity:activity-compose:1.8.0")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
 
     implementation(platform("com.google.firebase:firebase-bom:33.13.0"))
     implementation("com.google.firebase:firebase-analytics")

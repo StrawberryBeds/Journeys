@@ -6,31 +6,35 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Place
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import androidx.glance.layout.padding
-import com.samuelwood.journeys.ui.theme.JourneysTheme
-import com.samuelwood.journeys.views.JourneysView
-import com.samuelwood.journeys.views.MapView
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.samuelwood.journeys.ui.theme.JourneysTheme
 import com.samuelwood.journeys.views.JourneysNavigationBar
+import com.samuelwood.journeys.views.JourneysView
+import com.samuelwood.journeys.views.MapView
 import com.samuelwood.journeys.views.SettingsView
 
-
-//import androidx.compose.material3.MaterialTheme
-//
-//
-//import androidx.compose.ui.graphics.Color.Companion.Gray
-//
-//import com.samuelwood.journeys.ui.theme.JourneysTheme
-//import com.samuelwood.journeys.viewModels.ViewModelJourney
-//import com.samuelwood.journeys.viewModels.ViewModelMap
-//import com.samuelwood.journeys.viewModels.ViewModelSettings
 
 class MainActivity : ComponentActivity() {
 
@@ -46,16 +50,16 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            JourneysTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+//            JourneysTheme {
+//                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     JourneysApp()
 //                      viewModelUser,
 //                        viewModelJourney,
 //                        viewModelMap,
 //                        viewModelSettings,
 //                        navController = rememberNavController()
-                }
-            }
+//                }
+//            }
         }
     }
 }
@@ -64,33 +68,99 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun JourneysApp() {
+    val navController = rememberNavController() // Should be androidx.navigation.compose.rememberNavController
 
-    val navController = rememberNavController()
-
-    JourneysTheme {
+//    JourneysTheme {
         Scaffold(
-            bottomBar = { JourneysNavigationBar(navController = NavController) }
-        ) { padding ->
-
-            NavHost(
-                navController = navController,
-                startDestination = "journeys",
-                modifier = Modifier.padding(16.dp)
-            ) {
-                composable("journeys_screen") {
-                    JourneysView(navController = navController) // Your JourneysView composable
-                }
-                composable("map_screen") {
-                    MapView(navController = navController) // Another composable destination
-                }
-                // Add more composable destinations here
-                composable("settings_screen") {
-                    SettingsView(navController = navController)
-                }
+            bottomBar = { BottomNavigationBar(navController) // Pass the correct instance
             }
+        ) { padding ->
+            NavigationGraph(navController = navController)
+        }
+}
+
+@Composable
+fun BottomNavigationBar(navController: NavController) {
+    val items = listOf(
+        BottomNavItem.Journeys,
+        BottomNavItem.Map,
+        BottomNavItem.Settings
+    )
+
+    BottomNavigation {
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentRoute = navBackStackEntry?.destination?.route
+
+        items.forEach { item ->
+            BottomNavigationItem(
+                icon = { Icon(item.icon, contentDescription = item.title) },
+                label = { Text(item.title) },
+                selected = currentRoute == item.route,
+                onClick = {
+                    navController.navigate(item.route) {
+                        navController.graph.startDestinationRoute?.let { route ->
+                            popUpTo(route) {
+                                saveState = true
+                            }
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                }
+            )
         }
     }
 }
+
+@Composable
+fun NavigationGraph(navController: NavHostController) {
+    NavHost(navController, startDestination = BottomNavItem.Journeys.route) {
+        composable(BottomNavItem.Journeys.route) { JourneysView() }
+        composable(BottomNavItem.Map.route) { MapView() }
+        composable(BottomNavItem.Settings.route) { SettingsView() }
+    }
+}
+
+//@Composable
+//fun HomeScreen() {
+//    Text(text = "Home Screen")
+//}
+//
+//@Composable
+//fun SearchScreen() {
+//    Text(text = "Search Screen")
+//}
+//
+//@Composable
+//fun ProfileScreen() {
+//    Text(text = "Profile Screen")
+//}
+
+sealed class BottomNavItem(var title: String, var icon: ImageVector, var route: String) {
+    object Journeys : BottomNavItem("Journeys", Icons.Default.Menu, "journeys_screen")
+    object Map : BottomNavItem("Map", Icons.Default.Place, "map_screen")
+    object Settings : BottomNavItem("Settings", Icons.Default.Settings, "settings_screen")
+}
+
+//            NavHost(
+//                navController = navController,
+//                startDestination = "journeys",
+//                modifier = Modifier.padding(16.dp)
+//            ) {
+//                composable("journeys_screen") {
+//                    JourneysView(navController = navController) // Your JourneysView composable
+//                }
+//                composable("map_screen") {
+//                    MapView(navController = navController) // Another composable destination
+//                }
+//                // Add more composable destinations here
+//                composable("settings_screen") {
+//                    SettingsView(navController = navController)
+//                }
+//            }
+//        }
+//    }
+//}
 
 
 //@Composable

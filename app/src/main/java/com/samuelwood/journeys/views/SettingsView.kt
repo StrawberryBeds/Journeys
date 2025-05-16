@@ -17,7 +17,7 @@ import androidx.navigation.NavHostController
 import com.samuelwood.journeys.viewModels.ViewModelSettings
 
 @Composable
-fun SettingsView(navController: NavController
+fun SettingsView(
 //    viewModelSettings: ViewModelSettings,
 ) {
 
