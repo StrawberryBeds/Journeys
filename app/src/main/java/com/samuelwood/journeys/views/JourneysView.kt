@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.samuelwood.journeys.models.Journey
 import com.samuelwood.journeys.viewModels.ViewModelJourney
 
 @Composable
@@ -68,9 +69,7 @@ fun JourneysView() {
                         .padding(8.dp)
                 )
             }
-            Spacer(
-                modifier = Modifier.padding(8.dp)
-            )
+            Spacer(modifier = Modifier.padding(8.dp))
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -84,10 +83,8 @@ fun JourneysView() {
                         .padding(8.dp)
                 )
             }
-            Spacer(
-                modifier = Modifier
-                    .padding(8.dp)
-            )
+            Spacer(modifier = Modifier.padding(8.dp))
+
             Row(
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -96,6 +93,22 @@ fun JourneysView() {
                     enabled = newDeparture.isNotEmpty() && newDestination.isNotEmpty()
                 ) {
                     Text("Add Journey")
+                }
+                    Spacer(modifier = Modifier.padding(8.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Button(
+                            onClick = {
+                                viewModelJourney.getAllJourneys(
+                                    departure = "",
+                                    destination = ""
+                                )
+                            },
+                        ) {
+                            Text("Get All Journeys")
+                            }
 
 //                    LazyColumn(modifier = Modifier.padding(top = 16.dp)) {
 //            items(items = viewModelJourney.journeys) { journey ->
@@ -116,6 +129,7 @@ fun JourneysView() {
 //                            Icon(Icons.Default.Delete, contentDescription = "Supprimer")
 //                        }
 //                    }
+
                 }
             }
         }
