@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
         setContent {
 //            JourneysTheme {
 //                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    JourneysApp()
+            JourneysApp()
 //                      viewModelUser,
 //                        viewModelJourney,
 //                        viewModelMap,
@@ -56,18 +56,19 @@ class MainActivity : ComponentActivity() {
 }
 
 
-
 @Composable
 fun JourneysApp() {
-    val navController = rememberNavController() // Should be androidx.navigation.compose.rememberNavController
+    val navController =
+        rememberNavController() // Should be androidx.navigation.compose.rememberNavController
 
 //    JourneysTheme {
-        Scaffold(
-            bottomBar = { BottomNavigationBar(navController) // Pass the correct instance
-            }
-        ) { padding ->
-            NavigationGraph(navController = navController)
+    Scaffold(
+        bottomBar = {
+            BottomNavigationBar(navController) // Pass the correct instance
         }
+    ) { padding ->
+        NavigationGraph(navController = navController)
+    }
 }
 
 @Composable
@@ -184,8 +185,6 @@ sealed class BottomNavItem(var title: String, var icon: ImageVector, var route: 
 //                taskId?.let { EcranDetails(viewModel, navController, it) }
 //    }
 //}
-
-
 
 
 //    }
