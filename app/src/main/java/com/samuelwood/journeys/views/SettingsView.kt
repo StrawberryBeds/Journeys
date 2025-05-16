@@ -12,9 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import com.samuelwood.journeys.viewModels.ViewModelSettings
 
 @Composable
 fun SettingsView(
