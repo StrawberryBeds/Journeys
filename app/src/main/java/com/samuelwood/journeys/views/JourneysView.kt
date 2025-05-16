@@ -7,7 +7,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -44,28 +49,7 @@ fun JourneysView() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.padding(8.dp))
-////        Row(
-////            modifier = Modifier.fillMaxWidth()
-////        ) {
-////            Button(
-////                onClick = {
-////                    viewModel.deconecterUtilisateur()
-////                    navController.navigate("se_connecter")
-////                },
-////                modifier = Modifier
-////                    .fillMaxWidth()
-////                    .padding(start = 8.dp),
-////                colors = ButtonColors(
-////                    containerColor = Red,
-////                    contentColor = White,
-////                    disabledContainerColor = Red,
-////                    disabledContentColor = White
-////                )
-////            ) {
-////                Text("Se déconnecter ")
-////            }
-////        }
-            Spacer(modifier = Modifier.padding(8.dp))
+
             Text(
                 "New Journey"
             )
@@ -112,12 +96,8 @@ fun JourneysView() {
                     enabled = newDeparture.isNotEmpty() && newDestination.isNotEmpty()
                 ) {
                     Text("Add Journey")
-                }
-            }
-        }
-    }
-}
-//        LazyColumn(modifier = Modifier.padding(top = 16.dp)) {
+
+//                    LazyColumn(modifier = Modifier.padding(top = 16.dp)) {
 //            items(items = viewModelJourney.journeys) { journey ->
 //                Row(
 //                    verticalAlignment = Alignment.CenterVertically,
@@ -126,13 +106,19 @@ fun JourneysView() {
 //                    IconButton(onClick = { navController.navigate("map_screen/${journey.idJourney}") }) {
 //                        Icon(Icons.Default.Edit, contentDescription = "Modifier")
 //                    }
-//                    Text(journey.nomJourney, modifier = Modifier.weight(1f))
-//
-//                    IconButton(onClick = { viewModelJourney.deleteJourney(idTache = journey.idTache) }) {
-//                        Icon(Icons.Default.Delete, contentDescription = "Supprimer")
-//                    }
-//                }
-//            }
-//        }
+//                        Text("To Paris", modifier = Modifier.weight(1f))
 
+//                        journey.nomJourney, modifier = Modifier.weight(1f))
+
+//                        IconButton(onClick = {
+//                        viewModelJourney.deleteJourney(idTache = journey.idTache)
+//                        }) {
+//                            Icon(Icons.Default.Delete, contentDescription = "Supprimer")
+//                        }
+//                    }
+                }
+            }
+        }
+    }
+}
 
