@@ -64,6 +64,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    implementation ("androidx.activity:activity-ktx:1.8.0")
+    implementation ("androidx.fragment:fragment-ktx:1.6.2")
+
     implementation ("androidx.compose.ui:ui:1.6.0")
     implementation ("androidx.compose.material:material:1.6.0")
     implementation ("androidx.compose.ui:ui-tooling-preview:1.6.0")
@@ -75,4 +78,6 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
 
     implementation("org.osmdroid:osmdroid-android:6.1.14")
+
+    implementation ("com.google.android.gms:play-services-location:21.0.1")
 }

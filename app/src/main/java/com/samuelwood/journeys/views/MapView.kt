@@ -4,6 +4,8 @@ import android.preference.PreferenceManager
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -16,6 +18,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.samuelwood.journeys.viewModels.ViewModelJourney
+import com.samuelwood.journeys.viewModels.ViewModelMap
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
@@ -23,7 +28,11 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 
 @Composable
+
 fun MapView() {
+
+    val viewModelMap: ViewModelMap = viewModel()
+
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -84,10 +93,18 @@ fun MapView() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Bottom // Not strictly needed here as it's the only item
         ) {
-            Button(onClick = {
-                // TODO: Implement button click action
-            }) {
-                Text("Start")
+            Row {
+                Button(onClick = {
+                    viewModelMap.findMyLocation()
+                }) {
+                    Text("Find My Location")
+                }
+                Spacer(modifier = Modifier.padding(8.dp))
+                Button(onClick = {
+                    viewModelMap.startJourney()
+                }) {
+                    Text("Start Journey")
+                }
             }
         }
     }
