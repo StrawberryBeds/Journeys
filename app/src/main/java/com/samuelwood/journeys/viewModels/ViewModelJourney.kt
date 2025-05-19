@@ -35,24 +35,6 @@ class ViewModelJourney : ViewModel() {
                 println("Error getting all documents: $exception")
             }
     }
-
-
-
-fun addJourney(departure: String, destination: String) {
-        val db = FirebaseFirestore.getInstance()
-        val journey = hashMapOf(
-            "newDeparture" to departure,
-            "newDestination" to destination
-        )
-        db.collection("journeys")
-            .add(journey)
-            .addOnSuccessListener { docRef ->
-                Log.d("Firestore", "Ajout réussi avec ID : ${docRef.id}")
-            }
-            .addOnFailureListener { e ->
-                Log.w("Firestore", "Erreur lors de l'ajout", e)
-            }
-    }
 }
 
 //class JourneysViewModel : ViewModel() {

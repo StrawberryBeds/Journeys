@@ -7,12 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -25,7 +20,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.samuelwood.journeys.models.Journey
 import com.samuelwood.journeys.viewModels.ViewModelJourney
 
 @Composable
@@ -88,12 +82,12 @@ fun JourneysView() {
             Row(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Button(
-                    onClick = { viewModelJourney.addJourney(newDeparture, newDestination) },
-                    enabled = newDeparture.isNotEmpty() && newDestination.isNotEmpty()
-                ) {
-                    Text("Add Journey")
-                }
+//                Button(
+//                    onClick = { viewModelJourney.addJourney(newDeparture, newDestination) },
+//                    enabled = newDeparture.isNotEmpty() && newDestination.isNotEmpty()
+//                ) {
+//                    Text("Add Journey")
+//                }
                     Spacer(modifier = Modifier.padding(8.dp))
 
                     Row(

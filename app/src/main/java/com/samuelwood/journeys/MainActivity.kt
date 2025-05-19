@@ -1,7 +1,6 @@
 package com.samuelwood.journeys
 
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
@@ -22,7 +21,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -37,8 +38,6 @@ import com.samuelwood.journeys.viewModels.ViewModelMap
 import com.samuelwood.journeys.views.JourneysView
 import com.samuelwood.journeys.views.MapView
 import com.samuelwood.journeys.views.SettingsView
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.platform.LocalContext
 
 
 class MainActivity : ComponentActivity() {
