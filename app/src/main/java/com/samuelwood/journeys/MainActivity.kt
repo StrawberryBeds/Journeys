@@ -25,6 +25,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -49,14 +50,16 @@ class MainActivity : ComponentActivity() {
     ) { permissions ->
         if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true) {
             findMyLocation()
-            Log.i("Message", "findMyLocation called, MainActivity 61")
+            Log.i("Message", "findMyLocation called, MainActivity 52")
         } else {
             Log.e("MainActivity", "Location permission denied")
         }
     }
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-//    private val viewModelMap: ViewModelMap by viewModels()
+
+    val _locationLiveData = MutableLiveData<Pair<Double, Double>>()
+    val locationLiveData = _locationLiveData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,7 +75,7 @@ class MainActivity : ComponentActivity() {
             )
         } else {
             findMyLocation()
-            Log.i("Message", "findMyLocation called, MainActivity 91")
+            Log.i("Message", "findMyLocation called, MainActivity 75")
         }
 
 
@@ -92,14 +95,15 @@ class MainActivity : ComponentActivity() {
                     if (location != null) {
                         val latitude = location.latitude
                         val longitude = location.longitude
-                        viewModelMap.setLocation(latitude, longitude)
+                        setLocation(latitude, longitude)
+
 //                        updateMapLocation(latitude, longitude)
                         Log.i(
                             "MainActivity",
                             "setLocation called with latitude: $latitude, longitude: $longitude"
                         )
                     } else {
-                        Log.e("MainActivity", "Location is null")
+                        Log.e("MainActivity", "Location is null, MainActivity 106")
                     }
                 }
                 .addOnFailureListener { exception ->
@@ -108,6 +112,10 @@ class MainActivity : ComponentActivity() {
         } else {
             Log.e("MainActivity", "Location permission not granted")
         }
+    }
+
+    fun setLocation(latitude: Double, longitude: Double) {
+        _locationLiveData.value = Pair(latitude, longitude)
     }
 
 
