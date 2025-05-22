@@ -30,7 +30,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.firebase.Timestamp
-import com.samuelwood.journeys.viewModels.ViewModelJourney
 import com.samuelwood.journeys.viewModels.ViewModelMap
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -67,7 +66,7 @@ fun MapView() {
 
                     val mapController = controller
                     mapController.setZoom(15.0)
-                    val startPoint = GeoPoint(48.8583, 2.2944)
+                    val startPoint = GeoPoint(45.5520559, -73.6420105) // College Ahuntsic
                     mapController.setCenter(startPoint)
 
                     val marker = Marker(this)
@@ -107,9 +106,9 @@ fun MapView() {
         ) {
             Row {
                 Button(onClick = {
-                    viewModelMap.findMyLocation()
+                    viewModelMap.addNewLocation()
                 }) {
-                    Text("Find My Location")
+                    Text("Add a Location")
                 }
                 Spacer(modifier = Modifier.padding(8.dp))
 
@@ -144,6 +143,7 @@ fun JourneyDialog(
 //    var userID by remember { mutableStateOf("") }
     var title by remember { mutableStateOf("") }
     var newTitle by remember { mutableStateOf("") }
+    var newCreatedAt by remember { mutableStateOf(Timestamp)}
 //    var description by remember { mutableStateOf("") }
 
     var newDescription by remember { mutableStateOf("") }

@@ -87,15 +87,23 @@ class MainActivity : ComponentActivity() {
 
 
     fun findMyLocation() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-            == PackageManager.PERMISSION_GRANTED
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+            || ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
         ) {
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location: Location? ->
-                    location?.let {
-                        val latitude = it.latitude
-                        val longitude = it.longitude
-                        // Use latitude and longitude as needed
+                    // Got last known location. In some rare situations this can be null.
+                    if (location != null) {
+                        // Logic to handle location object
+                        val latitude = location.latitude
+                        val longitude = location.longitude
+                        // ...
                     }
                 }
         }
