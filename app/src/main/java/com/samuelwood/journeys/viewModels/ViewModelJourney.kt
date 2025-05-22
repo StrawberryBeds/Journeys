@@ -9,11 +9,11 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 
 class ViewModelJourney : ViewModel() {
 
-    fun getAllJourneys(departure: String, destination: String) {
+    fun getAllJourneys() {
         val db = FirebaseFirestore.getInstance()
 //        val journeys = hashSetOf(
-//            departure to departure,
-//            destination to destination
+//            title to title,
+//            createdAt to createdAt
 //        )
         db.collection("journeys")
             .get()
@@ -33,24 +33,6 @@ class ViewModelJourney : ViewModel() {
             }
             .addOnFailureListener { exception ->
                 println("Error getting all documents: $exception")
-            }
-    }
-
-
-
-fun addJourney(departure: String, destination: String) {
-        val db = FirebaseFirestore.getInstance()
-        val journey = hashMapOf(
-            "newDeparture" to departure,
-            "newDestination" to destination
-        )
-        db.collection("journeys")
-            .add(journey)
-            .addOnSuccessListener { docRef ->
-                Log.d("Firestore", "Ajout réussi avec ID : ${docRef.id}")
-            }
-            .addOnFailureListener { e ->
-                Log.w("Firestore", "Erreur lors de l'ajout", e)
             }
     }
 }

@@ -43,8 +43,8 @@ android {
 
 dependencies {
 
-        var nav_version = "2.9.0" // Use the latest version
-        implementation ("androidx.navigation:navigation-compose:$nav_version")
+    var nav_version = "2.9.0" // Use the latest version
+    implementation ("androidx.navigation:navigation-compose:$nav_version")
 
 
     implementation(libs.androidx.core.ktx)

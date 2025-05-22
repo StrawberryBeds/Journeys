@@ -7,12 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -25,7 +20,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.samuelwood.journeys.models.Journey
 import com.samuelwood.journeys.viewModels.ViewModelJourney
 
 @Composable
@@ -34,8 +28,8 @@ fun JourneysView() {
 
 
     val viewModelJourney: ViewModelJourney = viewModel()
-    var newDeparture by remember { mutableStateOf("") }
-    var newDestination by remember { mutableStateOf("") }
+    var title by remember { mutableStateOf("") }
+    var createdAt by remember { mutableStateOf("") }
 
 //    val journeyList by viewModel.resultLiveData.observeAsState(initial = "")
 
@@ -52,48 +46,48 @@ fun JourneysView() {
             Spacer(modifier = Modifier.padding(8.dp))
 
             Text(
-                "New Journey"
+                "My Journeys"
             )
 
-            Spacer(modifier = Modifier.padding(8.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                TextField(
-                    value = newDeparture,
-                    onValueChange = { newDeparture = it },
-                    label = { "New Departure" }, // This is not showing
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(8.dp)
-                )
-            }
-            Spacer(modifier = Modifier.padding(8.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                TextField(
-                    value = newDestination,
-                    onValueChange = { newDestination = it },
-                    label = { "New Destination" }, // This is not showing
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(8.dp)
-                )
-            }
-            Spacer(modifier = Modifier.padding(8.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Button(
-                    onClick = { viewModelJourney.addJourney(newDeparture, newDestination) },
-                    enabled = newDeparture.isNotEmpty() && newDestination.isNotEmpty()
-                ) {
-                    Text("Add Journey")
-                }
+//            Spacer(modifier = Modifier.padding(8.dp))
+//            Row(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//            ) {
+//                TextField(
+//                    value = newDeparture,
+//                    onValueChange = { newDeparture = it },
+//                    label = { "New Departure" }, // This is not showing
+//                    modifier = Modifier
+//                        .weight(1f)
+//                        .padding(8.dp)
+//                )
+//            }
+//            Spacer(modifier = Modifier.padding(8.dp))
+//            Row(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//            ) {
+//                TextField(
+//                    value = newDestination,
+//                    onValueChange = { newDestination = it },
+//                    label = { "New Destination" }, // This is not showing
+//                    modifier = Modifier
+//                        .weight(1f)
+//                        .padding(8.dp)
+//                )
+//            }
+//            Spacer(modifier = Modifier.padding(8.dp))
+//
+//            Row(
+//                modifier = Modifier.fillMaxWidth()
+//            ) {
+//                Button(
+//                    onClick = { viewModelJourney.addJourney(newDeparture, newDestination) },
+//                    enabled = newDeparture.isNotEmpty() && newDestination.isNotEmpty()
+//                ) {
+//                    Text("Add Journey")
+//                }
                     Spacer(modifier = Modifier.padding(8.dp))
 
                     Row(
@@ -102,8 +96,6 @@ fun JourneysView() {
                         Button(
                             onClick = {
                                 viewModelJourney.getAllJourneys(
-                                    departure = "",
-                                    destination = ""
                                 )
                             },
                         ) {
@@ -130,7 +122,6 @@ fun JourneysView() {
 //                        }
 //                    }
 
-                }
             }
         }
     }
