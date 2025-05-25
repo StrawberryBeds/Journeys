@@ -14,7 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class ViewModelMap : ViewModel() {
 
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+//    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     fun findMyLocation() {
 //        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)

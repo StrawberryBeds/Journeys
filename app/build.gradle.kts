@@ -4,7 +4,12 @@ plugins {
     alias(libs.plugins.kotlin.compose)
 
     id("com.google.gms.google-services")
+//    id("org.jetbrains.kotlin.plugin.noarg")
 }
+
+//noArg {
+//    annotation(com.samuelwood.journeys)
+//}
 
 android {
     namespace = "com.samuelwood.journeys"
@@ -45,7 +50,6 @@ dependencies {
 
     var nav_version = "2.9.0" // Use the latest version
     implementation ("androidx.navigation:navigation-compose:$nav_version")
-
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
