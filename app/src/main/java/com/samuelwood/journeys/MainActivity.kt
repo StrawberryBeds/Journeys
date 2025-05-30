@@ -123,7 +123,7 @@ fun BottomNavigationBar(navController: NavController) {
 
 @Composable
 fun NavigationGraph(navController: NavHostController, permissionGranted: Boolean) {
-    NavHost(navController, startDestination = BottomNavItem.Journeys.route) {
+    NavHost(navController, startDestination = BottomNavItem.Map.route) {
         composable(BottomNavItem.Journeys.route) { JourneysView() }
         composable(BottomNavItem.Map.route) { MapScreen(permissionGranted) }
         composable(BottomNavItem.Settings.route) { SettingsView() }
