@@ -142,11 +142,11 @@ fun JourneyDialog(
 
 //    var userID by remember { mutableStateOf("") }
     var title by remember { mutableStateOf("") }
-    var newTitle by remember { mutableStateOf("") }
+//    var newTitle by remember { mutableStateOf("") }
     var newCreatedAt by remember { mutableStateOf(Timestamp)}
-//    var description by remember { mutableStateOf("") }
+    var description by remember { mutableStateOf("") }
 
-    var newDescription by remember { mutableStateOf("") }
+//    var newDescription by remember { mutableStateOf("") }
     var showDialog by remember { mutableStateOf(false) }
 //    var createdAt by remember { mutableStateOf("")}
 //    var positions by remember { mutableListOf() }
@@ -175,8 +175,8 @@ fun JourneyDialog(
             ) {
 //                var newTitle = null
                 TextField(
-                    value = newTitle,
-                    onValueChange = { newTitle = it },
+                    value = title,
+                    onValueChange = { title = it },
                     label = { "Journey Title" }, // This is not showing
                     modifier = Modifier
                         .weight(1f)
@@ -192,8 +192,8 @@ fun JourneyDialog(
                     .fillMaxWidth()
             ) {
                 TextField(
-                    value = newDescription,
-                    onValueChange = { newDescription = it },
+                    value = description,
+                    onValueChange = { description = it },
                     label = { "New Description" }, // This is not showing
                     modifier = Modifier
                         .weight(1f)
@@ -212,10 +212,10 @@ fun JourneyDialog(
 
                 Button(
                     onClick = {
-                        viewModelMap.addJourney(newTitle, newDescription)
+                        viewModelMap.addJourney(title, description)
                         showDialog = false
                     },
-                    enabled = newTitle.isNotEmpty() && newDescription.isNotEmpty(),
+                    enabled = title.isNotEmpty() && description.isNotEmpty(),
                 ) {
                     Text("Add Journey")
                 }

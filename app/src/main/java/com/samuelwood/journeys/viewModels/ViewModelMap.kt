@@ -33,8 +33,8 @@ class ViewModelMap : ViewModel() {
     fun addJourney(title: String, description: String) {
         val db = FirebaseFirestore.getInstance()
         val journey = hashMapOf(
-            "newTitle" to title,
-            "newDescription" to description,
+            "title" to title,
+            "description" to description,
             "createdAt" to FieldValue.serverTimestamp()
         )
         db.collection("journeys")
