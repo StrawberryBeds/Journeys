@@ -1,6 +1,7 @@
 package com.samuelwood.journeys.views
 
-import android.preference.PreferenceManager
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,92 +37,98 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
+import android.content.Context
+import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
+import android.preference.PreferenceManager
+import androidx.compose.material3.AlertDialog
 
 @Composable
-
-fun MapView() {
-
-    val viewModelMap: ViewModelMap = viewModel()
-    var showDialog by remember {  mutableStateOf(false) }
-
+fun MapScreen(permissionGranted: Boolean) {
     val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
+    val viewModelMap = remember { ViewModelMap(context.applicationContext) }
+    var showDialog by remember { mutableStateOf(false) }
+    var showAlert by remember { mutableStateOf(false) }
 
-    // Initialize OSMDroid configuration once
-    remember {
-        Configuration.getInstance().load(
-            context,
-            PreferenceManager.getDefaultSharedPreferences(context)
-        )
-        true
+    val onSuccess: (latitude: Double, longitude: Double) -> Unit = { latitude, longitude ->
+        showAlert = true
     }
 
-    // Use Box to layer the MapView and the Button
+    val onFailure: (Exception) -> Unit = { exception ->
+        Log.e("MapView", "Failed to add new position", exception)
+    }
+
+    DisposableEffect(Unit) {
+        Configuration.getInstance().apply {
+            load(context, PreferenceManager.getDefaultSharedPreferences(context))
+        }
+        onDispose { }
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
         AndroidView(
-            factory = { context ->
-                MapView(context).apply {
+            factory = { ctx ->
+                MapView(ctx).apply {
                     setTileSource(TileSourceFactory.MAPNIK)
                     setMultiTouchControls(true)
-
                     val mapController = controller
                     mapController.setZoom(15.0)
-                    val startPoint = GeoPoint(45.5520559, -73.6420105) // College Ahuntsic
+                    val startPoint = GeoPoint(45.5520559, -73.6420105)
                     mapController.setCenter(startPoint)
 
                     val marker = Marker(this)
                     marker.position = startPoint
                     marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-                    marker.title = "Tour Eiffel"
+                    marker.title = "College Ahuntsic"
                     overlays.add(marker)
                 }
             },
-            update = { /* No direct updates for now */ },
-            modifier = Modifier.fillMaxSize() // MapView fills the entire Box
+            modifier = Modifier.fillMaxSize()
         )
-//        { view ->
-//            // Observe the lifecycle and call onResume/onPause
-//            DisposableEffect(lifecycleOwner) {
-//                val observer = LifecycleEventObserver { _, event ->
-//                    when (event) {
-//                        Lifecycle.Event.ON_RESUME -> view.onResume()
-//                        Lifecycle.Event.ON_PAUSE -> view.onPause()
-//                        else -> {}
-//                    }
-//                }
-//                lifecycleOwner.lifecycle.addObserver(observer)
-//                onDispose {
-//                    lifecycleOwner.lifecycle.removeObserver(observer)
-//                }
-//            }
-//        }
 
-        // Position the button at the bottom and center-horizontally
         Column(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 144.dp), // Equivalent to android:layout_marginBottom
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Bottom // Not strictly needed here as it's the only item
+                .padding(bottom = 144.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row {
-                Button(onClick = {
-                    viewModelMap.addNewLocation()
-                }) {
-                    Text("Add a Location")
+                Button(
+                    onClick = {
+                        if (permissionGranted) {
+                            viewModelMap.addNewPosition(onSuccess, onFailure)
+                        } else {
+                            // Optionally, show a message to the user that permission is required
+                            Toast.makeText(context, "Location permission is required", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                ) {
+                    Text("Add a Position")
                 }
+
+                if (showAlert) {
+                    AlertDialog(
+                        onDismissRequest = { showAlert = false },
+                        title = { Text("Success") },
+                        text = { Text("New position added successfully!") },
+                        confirmButton = {
+                            Button(onClick = { showAlert = false }) {
+                                Text("OK")
+                            }
+                        }
+                    )
+                }
+
                 Spacer(modifier = Modifier.padding(8.dp))
 
                 Button(onClick = { showDialog = true }) {
                     Text("New Journey")
                 }
+
                 if (showDialog) {
                     JourneyDialog(
                         onDismissRequest = { showDialog = false },
-                        onConfirmation = {
-                            // Handle confirmation action
-                            showDialog = false
-                        },
+                        onConfirmation = { showDialog = false },
                         dialogTitle = "Alert Title",
                         dialogText = "This is the message of the alert dialog."
                     )
@@ -130,6 +137,8 @@ fun MapView() {
         }
     }
 }
+
+
 
 @Composable
 fun JourneyDialog(
@@ -223,6 +232,23 @@ fun JourneyDialog(
         }
     }
 }
+
+//        { view ->
+//            // Observe the lifecycle and call onResume/onPause
+//            DisposableEffect(lifecycleOwner) {
+//                val observer = LifecycleEventObserver { _, event ->
+//                    when (event) {
+//                        Lifecycle.Event.ON_RESUME -> view.onResume()
+//                        Lifecycle.Event.ON_PAUSE -> view.onPause()
+//                        else -> {}
+//                    }
+//                }
+//                lifecycleOwner.lifecycle.addObserver(observer)
+//                onDispose {
+//                    lifecycleOwner.lifecycle.removeObserver(observer)
+//                }
+//            }
+//        }
 
 
 

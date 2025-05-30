@@ -2,6 +2,7 @@ package com.samuelwood.journeys
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.widget.Toast
 import android.location.Location
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -23,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -34,95 +36,55 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.samuelwood.journeys.viewModels.ViewModelMap
 import com.samuelwood.journeys.views.JourneysView
-import com.samuelwood.journeys.views.MapView
+import com.samuelwood.journeys.views.MapScreen
+import com.samuelwood.journeys.views.MapScreen
 import com.samuelwood.journeys.views.SettingsView
+
 
 
 class MainActivity : ComponentActivity() {
 
-    lateinit var fusedLocationClient: FusedLocationProviderClient
-
-//    val navController = rememberNavController()
-
-//    private val viewModelUser: ViewModelUser by viewModels()
-//    private val viewModelJourney: ViewModelJourney by viewModels()
-//    private val viewModelMap: ViewModelMap by viewModels()
-//    private val viewModelSettings: ViewModelSettings by viewModels()
+    private val permissionGranted = mutableStateOf(false)
 
     private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()
-    ) { permissions ->
-        if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true) {
-            findMyLocation()
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        permissionGranted.value = isGranted
+        if (!isGranted) {
+            Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show()
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
 
-            fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-//            JourneysTheme {
-//                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-            JourneysApp()
-//                      viewModelUser,
-//                        viewModelJourney,
-//                        viewModelMap,
-//                        viewModelSettings,
-//                        navController = rememberNavController()
-//                }
-//            }
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED
-            ) {
-                requestPermissionLauncher.launch(
-                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
-                )
-            } else {
-                findMyLocation()
-            }
-        }
-    }
-
-
-    fun findMyLocation() {
+        // Check and request permission
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
-            || ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
         ) {
-            fusedLocationClient.lastLocation
-                .addOnSuccessListener { location: Location? ->
-                    // Got last known location. In some rare situations this can be null.
-                    if (location != null) {
-                        // Logic to handle location object
-                        val latitude = location.latitude
-                        val longitude = location.longitude
-                        // ...
-                    }
-                }
+            permissionGranted.value = true
+        } else {
+            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+
+        setContent {
+            JourneysApp(permissionGranted.value)
         }
     }
 }
 
-
 @Composable
-fun JourneysApp() {
-    val navController =
-        rememberNavController() // Should be androidx.navigation.compose.rememberNavController
+fun JourneysApp(permissionGranted: Boolean) {
+    val navController = rememberNavController()
 
-//    JourneysTheme {
     Scaffold(
         bottomBar = {
-            BottomNavigationBar(navController) // Pass the correct instance
+            BottomNavigationBar(navController)
         }
     ) { padding ->
-        NavigationGraph(navController = navController)
+        NavigationGraph(navController = navController, permissionGranted = permissionGranted)
     }
 }
 
@@ -160,20 +122,20 @@ fun BottomNavigationBar(navController: NavController) {
 }
 
 @Composable
-fun NavigationGraph(navController: NavHostController) {
+fun NavigationGraph(navController: NavHostController, permissionGranted: Boolean) {
     NavHost(navController, startDestination = BottomNavItem.Journeys.route) {
         composable(BottomNavItem.Journeys.route) { JourneysView() }
-        composable(BottomNavItem.Map.route) { MapView() }
+        composable(BottomNavItem.Map.route) { MapScreen(permissionGranted) }
         composable(BottomNavItem.Settings.route) { SettingsView() }
     }
 }
-
 
 sealed class BottomNavItem(var title: String, var icon: ImageVector, var route: String) {
     object Journeys : BottomNavItem("Journeys", Icons.Default.Menu, "journeys_screen")
     object Map : BottomNavItem("Map", Icons.Default.Place, "map_screen")
     object Settings : BottomNavItem("Settings", Icons.Default.Settings, "settings_screen")
 }
+
 
 //            NavHost(
 //                navController = navController,
